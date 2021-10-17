@@ -32,7 +32,7 @@ public class UserWingsManager
 
     public void setWings(final String wings) {
         this.wings = wings;
-        Main.Update("UPDATE `Vertty_WingsPlugin` SET `wings` ='" + this.getWings() + "' WHERE `name` ='" + this.getName() + "'");
+        Main.store.update("UPDATE `Vertty_WingsPlugin` SET `wings` ='" + this.getWings() + "' WHERE `name` ='" + this.getName() + "'");
     }
 
     public String getName() {
@@ -44,6 +44,6 @@ public class UserWingsManager
     }
 
     private void insert() {
-        Main.Update("INSERT INTO `Vertty_WingsPlugin`(`id`, `name`, `wings`) VALUES (NULL, '" + this.getName() + "','" + this.getWings() + "')");
+        Main.store.update("INSERT INTO `Vertty_WingsPlugin`(`id`, `name`, `wings`) VALUES (NULL, '" + this.getName() + "','" + this.getWings() + "')");
     }
 }

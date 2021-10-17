@@ -5,7 +5,8 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginManager;
 import pl.vertty.wings.config.LoaderConfig;
 import pl.vertty.wings.listeners.PlyaerJoinListener;
-import pl.vertty.wings.mysql.MySQL;
+import pl.vertty.wings.mysql.Store;
+import pl.vertty.wings.mysql.StoreSQLITE;
 import pl.vertty.wings.wings.UserWings;
 import pl.vertty.wings.wings.WingsManager;
 
@@ -15,7 +16,7 @@ public class Main extends PluginBase {
 
     private static Main plugin;
     private static Main inst;
-    public static MySQL store;
+    public static Store store;
 
     public void onLoad() {
         plugin = this;
@@ -29,16 +30,21 @@ public class Main extends PluginBase {
         return plugin;
     }
 
-    public static void Update(String s){
-        store.executeUpdate(s);
-    }
 
     @Override
     public void onEnable() {
         inst = this;
-        store = new MySQL();
-        store.executeUpdate("CREATE TABLE IF NOT EXISTS `Vertty_WingsPlugin` (`id` int(100) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` varchar(32) NOT NULL, `wings` varchar(255) NOT NULL);");
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         LoaderConfig.load();
+        store = new StoreSQLITE("minecraft.db");
+        final boolean conn = store.connect();
+        if (conn) {
+            store.update(true, "CREATE TABLE IF NOT EXISTS `Vertty_WingsPlugin` (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `name` varchar(32) NOT NULL, `wings` varchar(255) NOT NULL);");
+        }
         UserWings.loadUsers();
         try {
             WingsManager.init(this);
@@ -52,8 +58,5 @@ public class Main extends PluginBase {
 
     @Override
     public void onDisable() {
-        if (Main.store != null) {
-            Main.store.close();
-        }
     }
 }

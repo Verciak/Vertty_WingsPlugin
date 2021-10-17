@@ -1,0 +1,5 @@
+main: pl.vertty.wings.Main
+version: 0.1
+author: VerttyPL
+api: [1.0.8]
+name: Vertty_WingsPlugin
