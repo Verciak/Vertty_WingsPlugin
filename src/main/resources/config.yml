@@ -1,0 +1,6 @@
+mysql:
+  host: "51.83.180.195"
+  name: "wings"
+  user: "root"
+  pass: "RwAupuah0kdbqV7680LmxyJ2K"
+  port: 3306

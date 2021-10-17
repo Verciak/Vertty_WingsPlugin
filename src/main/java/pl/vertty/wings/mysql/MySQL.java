@@ -1,6 +1,7 @@
 package pl.vertty.wings.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import pl.vertty.wings.config.LoaderConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,17 +11,17 @@ import java.util.function.Consumer;
 
 public class MySQL
 {
-    private final HikariDataSource dataSource = new HikariDataSource();
+    public static final HikariDataSource dataSource = new HikariDataSource();
 
     public MySQL() {
-//        String host = Config.host;
-//        String base = Config.name;
-//        String user = Config.user;
-//        String password = Config.pass;
-//        int port = Config.port;
-//        this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + base);
-//        this.dataSource.setUsername(user);
-//        this.dataSource.setPassword(password);
+        String host = LoaderConfig.host;
+        String base = LoaderConfig.name;
+        String user = LoaderConfig.user;
+        String password = LoaderConfig.pass;
+        int port = LoaderConfig.port;
+        this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + base);
+        this.dataSource.setUsername(user);
+        this.dataSource.setPassword(password);
         this.dataSource.addDataSourceProperty("cachePrepStmts", Boolean.valueOf(true));
         this.dataSource.addDataSourceProperty("prepStmtCacheSize", Integer.valueOf(250));
         this.dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", Integer.valueOf(2048));
@@ -34,8 +35,8 @@ public class MySQL
         this.dataSource.close();
     }
 
-    public ResultSet query(String query) {
-        try (Connection connection = this.dataSource.getConnection()) {
+    public static ResultSet query(String query) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
             return statement.executeQuery();
         } catch (SQLException e) {
